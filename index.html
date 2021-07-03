@@ -1,0 +1,46 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" > 
+    <title> LOJA DE CARROS</title>
+</head>
+<body>
+<div class="container">
+    <h1> LOJA DE CARROS </h1>
+    <div class="m-2">
+        <a class="btn btn-primary" href="/cadastro"> NOVO</a> 
+    </div>  
+        <a class="btn btn-primary" href="/pesquisar"> PESQUISAR</a>
+    </div>  
+    <div class="border" th:if="${lista != null}"> 
+        <div class="row m-1" th:each="veiculo : ${lista}">
+            <div class="col-6 border-bottom" >
+                <a th:href="${'/detalhes/' + contato.id}" th:text="${veiculo.placa}"></a>
+            </div>
+            <div class="col-3 text-center border-bottom">
+                <a class="btn btn-success btn-sm" th:href="${'/editar/' + veiculo.id}"> EDITAR </a>
+            </div>
+            <div class="col-3 text-center border-bottom">
+                <a class="btn btn-danger btn-sm" th:href="${'/deletar/' + veiculo.id}"> APAGAR </a>
+            </div>
+        </div>
+       
+    </div>
+
+    
+</div>
+    <script src="/js/jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+    
+
+    <script src="/js/jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

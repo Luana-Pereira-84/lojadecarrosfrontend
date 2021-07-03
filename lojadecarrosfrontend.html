@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>loja de Carros - Front-end </title>
+    <script src="https://cdn.jsdeliver.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Loja de Carros - Front-end</h1>
+
+        <div id="lista">
+            <button class="btn btn-sucess" v-on:click="limparCampos()"> Novo Contato</button>
+            <ul>
+                <li> v-for="item in lista">{{ veiculo.placa }}
+                    <button class="btn btn-link" v-on:click="lerDetalhes(veiculo.placa)" >{{ veiculo.placa }} </button>
+                    <button class="btn btn-danger" v-on:click="Deletar(veiculo.placa)" >Apagar </button>
+                </li>
+            </ul>
+        </div>
+
+        <div id="detalhes">
+            <h2> {{veiculo.carro}} </h2>
+            <h2> {{veiculo.ano}} </h2>
+            <h2> {{veiculo.placa}} </h2>
+        </div>
+
+        <div id="cadastro">
+            <div class="form-group">
+                <label for="carro">Carro</label>
+                <input type="text" class="form-control" name="carro" id="carro" v-model="veiculo.carro" />
+            </div>
+            <div class="form-group">
+                <label for="ano">Ano</label>
+            </div>
+            <div class="form-group">
+                <label for="placa">Placa</label>
+                <input type="text" class="form-control" name="placa" id="placa" v-model="veiculo.placa" />
+        </div>
+        <button class="btn btn-primary" v-on:click="cadastrar()">Salvar</button>
+
+    </div>
+
+    <script>
+var app = new Vue( {
+    el: '#app',
+    data: {
+        carro: '',
+        ano: '',
+        placa: '',
+        lista: []      
+        veiculo: {}
+    },
+    methods: {
+                listarTodos: function() {
+                    fetch('http://localhost:8080/')
+                        .then( (resposta)=> resposta.json() )
+                        .then( (objetoLista) => {
+                            console.log(objetoLista);
+                            this.lista = objetoLista;
+                        })
+
+                },
+                lerDetalhes: function(placa){
+                    fetch('http://localhost:8080/detalhes/' + placa)
+                        .then( (resposta)=> resposta.json() )
+                        .then( (objetoVeiculo) => {
+                            console.log(objetoLista);
+                            this.veiculo = objetoVeiculo;
+                     })
+                },
+                deletar: function(placa){
+                    fetch('http://localhost:8080/deletar/' + placa)
+                        .then ( () => {
+                            this.listarTodos();
+                            this.veiculo = {};
+                        } );            
+
+                },
+                cadastrar: function(){
+                    const headers = new Headers( { 'Content-Type': 'application/json ' } );
+
+                    fetch('http://localhost:8080/adicionar',
+                    {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(this.veiculo)
+                    }
+                }
+                .then( (resposta) => resposta.json() )
+                .then ( (objetoVeiculo) => {
+                    console.log(objetoVeiculo);
+                    this.veiculo = objetoVeiculo;
+                    this.listarTodos();
+                });
+        },
+        limparCampos: function() {
+            this.veiculo = {};
+        }
+    
+    },
+
+    created: function() {
+        this.listarTodos();
+    }
+} );
+    </script>
+
+</body>
+</html>
